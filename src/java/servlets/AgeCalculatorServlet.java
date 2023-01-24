@@ -21,19 +21,18 @@ public class AgeCalculatorServlet extends HttpServlet {
         int newAge;
         
         if (age == null || age.equals("")) {
-            try{
-            newAge = Integer.parseInt(age);
-            }catch (NumberFormatException ex) {
-            request.setAttribute("answer", "Invalid entry. Please enter your age.");
-            throw new NumberFormatException("Invalid Entry");
-            }
-            request.setAttribute("answer", "Invalid entry. Please enter your age.");
+            
+            request.setAttribute("answer", "Invalid entry. You must give your current age.");
             
             getServletContext().getRequestDispatcher("/WEB-INF/agecalculator.jsp")
                     .forward(request, response);
-            return;
         }
-        
+        char c = age.charAt(0);
+        if(Character.isLetter(c)||age.length()>3){
+            request.setAttribute("answer", "Invalid entry. Please Enter a Digit."); //still needs error checking, can get around this validation by 
+            getServletContext().getRequestDispatcher("/WEB-INF/agecalculator.jsp") //entering 0a - could use regex or something but not needed for scope
+                    .forward(request, response);                                    // of lab i guess :P
+        }
         newAge = Integer.parseInt(age)+1;
         request.setAttribute("answer", "Your new age will be "+newAge);   
         getServletContext().getRequestDispatcher("/WEB-INF/agecalculator.jsp")
